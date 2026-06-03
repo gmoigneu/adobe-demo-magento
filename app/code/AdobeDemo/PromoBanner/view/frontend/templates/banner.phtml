@@ -1,0 +1,35 @@
+<?php
+/**
+ * Free-shipping promotional banner template.
+ *
+ * @var \Magento\Framework\View\Element\Template $block
+ */
+?>
+<style>
+    .adobedemo-promo-banner {
+        background-color: #1a2a4a;
+        color: #f5c518;
+        text-align: center;
+        padding: 10px 16px;
+        width: 100%;
+        box-sizing: border-box;
+        font-size: 14px;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        line-height: 1.4;
+        z-index: 1000;
+        position: relative;
+    }
+
+    .adobedemo-promo-banner a {
+        color: #f5c518;
+        text-decoration: underline;
+    }
+
+    .adobedemo-promo-banner a:hover {
+        color: #ffffff;
+    }
+</style>
+<div class="adobedemo-promo-banner" role="banner" aria-label="<?= $block->escapeHtmlAttr(__('Promotional offer')) ?>">
+    <?= $block->escapeHtml(__('Free shipping on all orders over $50 — shop now!')) ?>
+</div>
