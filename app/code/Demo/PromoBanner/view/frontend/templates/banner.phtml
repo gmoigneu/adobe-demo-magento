@@ -1,0 +1,28 @@
+<?php
+/**
+ * Free-shipping promotional banner template
+ *
+ * @var \Magento\Framework\View\Element\Template $block
+ */
+?>
+<style>
+    .demo-promo-banner {
+        background-color: #1a1a2e;
+        color: #ffffff;
+        text-align: center;
+        padding: 10px 16px;
+        font-size: 14px;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        width: 100%;
+        box-sizing: border-box;
+        z-index: 9999;
+    }
+    .demo-promo-banner a {
+        color: #f0c040;
+        text-decoration: underline;
+    }
+</style>
+<div class="demo-promo-banner" role="banner" aria-label="<?= $block->escapeHtmlAttr(__('Promotional offer')) ?>">
+    🚚 <?= $block->escapeHtml(__('Free shipping on all orders — no minimum required!')) ?>
+</div>
