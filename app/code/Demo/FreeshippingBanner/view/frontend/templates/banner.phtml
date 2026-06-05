@@ -1,0 +1,29 @@
+<?php
+/**
+ * Free Shipping Banner template.
+ *
+ * @var \Demo\FreeshippingBanner\Block\Banner $block
+ */
+?>
+<style>
+    .demo-freeshipping-banner {
+        background-color: #1a1a1a;
+        color: #ffffff;
+        text-align: center;
+        padding: 10px 16px;
+        font-size: 14px;
+        font-family: inherit;
+        width: 100%;
+        box-sizing: border-box;
+        letter-spacing: 0.03em;
+    }
+    .demo-freeshipping-banner a {
+        color: #f0c040;
+        text-decoration: underline;
+        margin-left: 6px;
+    }
+</style>
+<div class="demo-freeshipping-banner" role="banner" aria-label="<?= $block->escapeHtmlAttr(__('Promotional banner')) ?>">
+    <?= $block->escapeHtml(__('🎉 Free Shipping on all orders over $50!')) ?>
+    <a href="<?= $block->escapeUrl($block->getUrl('catalogsearch/result/index', ['q' => 'sale'])) ?>"><?= $block->escapeHtml(__('Shop now')) ?></a>
+</div>
