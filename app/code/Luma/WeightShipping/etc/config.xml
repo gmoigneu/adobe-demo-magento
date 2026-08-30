@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <carriers>
+            <weightrate>
+                <active>1</active>
+                <model>Luma\WeightShipping\Model\Carrier\WeightRate</model>
+                <title>Standard Shipping</title>
+                <name>Weight Based Rate</name>
+                <base_fee>4.95</base_fee>
+                <rate_per_bracket>2.50</rate_per_bracket>
+                <sort_order>15</sort_order>
+            </weightrate>
+        </carriers>
+    </default>
+</config>
