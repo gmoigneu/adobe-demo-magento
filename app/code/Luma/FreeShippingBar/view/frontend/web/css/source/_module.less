@@ -1,0 +1,42 @@
+//
+//  Luma_FreeShippingBar
+//  ---------------------------------------------
+
+@free-shipping-bar__track-color: @color-gray92;
+@free-shipping-bar__fill-color: @color-blue1;
+@free-shipping-bar__success-color: #1c7430;
+
+.free-shipping-bar {
+    margin: 0 10px @indent__s;
+
+    .free-shipping-bar__message {
+        .lib-font-size(13);
+        margin: 0 0 @indent__xs;
+        text-align: center;
+    }
+
+    .free-shipping-bar__track {
+        background: @free-shipping-bar__track-color;
+        border-radius: 5px;
+        height: 10px;
+        overflow: hidden;
+    }
+
+    .free-shipping-bar__fill {
+        background: @free-shipping-bar__fill-color;
+        border-radius: 5px;
+        height: 100%;
+        transition: width 0.4s ease;
+    }
+
+    &.free-shipping-bar_unlocked {
+        .free-shipping-bar__fill {
+            background: @free-shipping-bar__success-color;
+        }
+
+        .free-shipping-bar__message {
+            color: @free-shipping-bar__success-color;
+            font-weight: @font-weight__bold;
+        }
+    }
+}

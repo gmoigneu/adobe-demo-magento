@@ -1,0 +1,15 @@
+<!-- ko if: visible -->
+<div class="free-shipping-bar" data-bind="css: {'free-shipping-bar_unlocked': unlocked}">
+    <p class="free-shipping-bar__message" data-bind="text: message"></p>
+    <div class="free-shipping-bar__track"
+         role="progressbar"
+         data-bind="attr: {
+            'aria-valuenow': percent,
+            'aria-valuemin': 0,
+            'aria-valuemax': 100,
+            'aria-label': $t('Progress toward free shipping')
+         }">
+        <div class="free-shipping-bar__fill" data-bind="style: {width: percent() + '%'}"></div>
+    </div>
+</div>
+<!-- /ko -->
