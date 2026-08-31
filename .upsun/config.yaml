@@ -15,6 +15,10 @@ applications:
         # setup:upgrade installs the fixtures on the next deploy.
         git clone --depth 1 --branch 2.4.6 https://github.com/magento/magento2-sample-data.git
         php -f magento2-sample-data/dev/tools/build-sample-data.php -- --ce-source="$PWD"
+        # pub/media is a mount, so media linked into it at build time vanishes at
+        # runtime. Stage the sample images outside the mount for the deploy hook.
+        mkdir -p init/media
+        cp -rL magento2-sample-data/pub/media/. init/media/
         # app/etc is mounted at runtime, which shadows the committed files in it.
         # Keep a copy outside the mount to restore on deploy.
         mkdir -p init
@@ -22,6 +26,13 @@ applications:
       deploy: |
         set -e
         cp -r init/etc/. app/etc/
+        # One-time copy of sample-data media into the pub/media mount, clearing
+        # any cached placeholder renditions from before the files existed.
+        if [ -d init/media ] && [ ! -f pub/media/.sample-media-installed ]; then
+          cp -r init/media/. pub/media/
+          rm -rf pub/media/catalog/product/cache
+          touch pub/media/.sample-media-installed
+        fi
         BASE_URL=$(echo "$PLATFORM_ROUTES" | base64 --decode | jq -r '[to_entries[] | select(.value.type == "upstream" and .value.primary == true)][0].key')
         if [ ! -f app/etc/env.php ]; then
           php -d memory_limit=-1 bin/magento setup:install \
