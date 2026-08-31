@@ -1,0 +1,55 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Variables
+//  _____________________________________________
+
+@free-shipping-bar__height: 8px;
+@free-shipping-bar__background: @color-gray80;
+@free-shipping-bar__fill: @color-orange-red1;
+@free-shipping-bar__fill-qualified: @color-dark-green1;
+
+//
+//  Common
+//  _____________________________________________
+
+& when (@media-common = true) {
+    .minicart-free-shipping {
+        margin: 0 0 @indent__s;
+
+        .free-shipping-progress {
+            .lib-css(background-color, @free-shipping-bar__background);
+            .lib-css(border-radius, @free-shipping-bar__height);
+            height: @free-shipping-bar__height;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .free-shipping-progress-fill {
+            .lib-css(background-color, @free-shipping-bar__fill);
+            .lib-css(border-radius, @free-shipping-bar__height);
+            .lib-css(transition, width .3s ease-in-out);
+            display: block;
+            height: 100%;
+            min-width: 0;
+        }
+
+        .free-shipping-progress.-qualified .free-shipping-progress-fill {
+            .lib-css(background-color, @free-shipping-bar__fill-qualified);
+        }
+
+        .free-shipping-message {
+            .lib-css(font-size, @font-size__s);
+            margin: @indent__xs 0 0;
+            text-align: center;
+        }
+
+        .free-shipping-progress.-qualified + .free-shipping-message {
+            .lib-css(color, @free-shipping-bar__fill-qualified);
+            font-weight: @font-weight__semibold;
+        }
+    }
+}
