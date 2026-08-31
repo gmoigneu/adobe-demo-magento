@@ -10,8 +10,13 @@ applications:
       build: |
         set -ex
         composer install --no-progress --no-interaction --optimize-autoloader --no-dev
+        # app/etc is mounted at runtime, which shadows the committed files in it.
+        # Keep a copy outside the mount to restore on deploy.
+        mkdir -p init
+        cp -r app/etc init/etc
       deploy: |
         set -e
+        cp -r init/etc/. app/etc/
         BASE_URL=$(echo "$PLATFORM_ROUTES" | base64 --decode | jq -r '[to_entries[] | select(.value.type == "upstream" and .value.primary == true)][0].key')
         if [ ! -f app/etc/env.php ]; then
           php -d memory_limit=-1 bin/magento setup:install \
@@ -52,7 +57,9 @@ applications:
           php bin/magento config:set web/unsecure/base_url "$BASE_URL"
           php bin/magento config:set web/secure/base_url "$BASE_URL"
         fi
-        php -d memory_limit=-1 bin/magento setup:static-content:deploy -f
+        # Note: no setup:static-content:deploy here — the app disk is 512MB and
+        # raising it needs org-level permissions. Default mode generates static
+        # files on demand via pub/static.php. Re-add SCD once disk is >= 2GB.
         php bin/magento cache:flush
     web:
       locations:
