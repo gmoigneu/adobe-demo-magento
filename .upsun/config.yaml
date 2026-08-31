@@ -1,0 +1,50 @@
+# Upsun configuration, generated using AI at: 2026-08-31T16:30:38-05:00
+# AI can make mistakes. Please modify this file to suit your needs.
+applications:
+  app:
+    type: php:8.5
+    build:
+      flavor: none
+    hooks:
+      build: |
+        set -ex
+        composer install --no-progress --no-interaction --optimize-autoloader --no-dev
+    web:
+      locations:
+        /:
+          root: pub
+          passthru: /index.php
+          allow: true
+    runtime:
+      extensions:
+        - xsl
+        - sodium
+        - redis
+    variables:
+      php:
+        memory_limit: 512M
+        max_execution_time: 300
+        upload_max_filesize: 10M
+    relationships:
+      db: {}
+      cache: {}
+      session: {}
+      search: {}
+      queue: {}
+
+services:
+  db:
+    type: mariadb:12.3
+  cache:
+    type: redis:8.8
+  session:
+    type: redis-persistent:8.8
+  search:
+    type: opensearch:3
+  queue:
+    type: rabbitmq:4.3
+
+routes:
+  https://{default}/:
+    type: upstream
+    upstream: app:http
