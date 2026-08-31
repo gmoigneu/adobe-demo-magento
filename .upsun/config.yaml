@@ -1,20 +1,97 @@
-# Upsun configuration, generated using AI at: 2026-08-31T16:30:38-05:00
-# AI can make mistakes. Please modify this file to suit your needs.
+# Upsun configuration for Magento 2.4.6 (PHP 8.2)
 applications:
   app:
-    type: php:8.5
+    type: php:8.2
+    # PHP defaults to a CPU-heavy profile; Magento's deploy hooks are memory-bound.
+    container_profile: HIGH_MEMORY
     build:
       flavor: none
     hooks:
       build: |
         set -ex
         composer install --no-progress --no-interaction --optimize-autoloader --no-dev
+      deploy: |
+        set -e
+        BASE_URL=$(echo "$PLATFORM_ROUTES" | base64 --decode | jq -r '[to_entries[] | select(.value.type == "upstream" and .value.primary == true)][0].key')
+        if [ ! -f app/etc/env.php ]; then
+          php -d memory_limit=-1 bin/magento setup:install \
+            --no-interaction \
+            --base-url="$BASE_URL" \
+            --db-host="$DB_HOST" \
+            --db-name="$DB_PATH" \
+            --db-user="$DB_USERNAME" \
+            --db-password="$DB_PASSWORD" \
+            --search-engine=opensearch \
+            --opensearch-host="$SEARCH_HOST" \
+            --opensearch-port="$SEARCH_PORT" \
+            --session-save=redis \
+            --session-save-redis-host="$SESSION_HOST" \
+            --session-save-redis-port="$SESSION_PORT" \
+            --cache-backend=redis \
+            --cache-backend-redis-server="$CACHE_HOST" \
+            --cache-backend-redis-port="$CACHE_PORT" \
+            --cache-backend-redis-db=1 \
+            --page-cache=redis \
+            --page-cache-redis-server="$CACHE_HOST" \
+            --page-cache-redis-port="$CACHE_PORT" \
+            --page-cache-redis-db=2 \
+            --amqp-host="$QUEUE_HOST" \
+            --amqp-port="$QUEUE_PORT" \
+            --amqp-user="$QUEUE_USERNAME" \
+            --amqp-password="$QUEUE_PASSWORD" \
+            --amqp-virtualhost="/" \
+            --admin-firstname=Admin \
+            --admin-lastname=User \
+            --admin-email="${ADMIN_EMAIL:-admin@example.com}" \
+            --admin-user="${ADMIN_USERNAME:-admin}" \
+            --admin-password="${ADMIN_PASSWORD:-ChangeMe123!}" \
+            --backend-frontname=admin \
+            --use-rewrites=1
+        else
+          php -d memory_limit=-1 bin/magento setup:upgrade --keep-generated
+          php bin/magento config:set web/unsecure/base_url "$BASE_URL"
+          php bin/magento config:set web/secure/base_url "$BASE_URL"
+        fi
+        php -d memory_limit=-1 bin/magento setup:static-content:deploy -f
+        php bin/magento cache:flush
     web:
       locations:
         /:
           root: pub
           passthru: /index.php
+          index:
+            - index.php
+          scripts: true
           allow: true
+          expires: -1
+        /static:
+          root: pub/static
+          passthru: /static.php
+          scripts: false
+          allow: true
+          expires: 1y
+        /media:
+          root: pub/media
+          passthru: /get.php
+          scripts: false
+          allow: true
+          expires: 1y
+    mounts:
+      var:
+        source: storage
+        source_path: var
+      generated:
+        source: storage
+        source_path: generated
+      app/etc:
+        source: storage
+        source_path: etc
+      pub/media:
+        source: storage
+        source_path: media
+      pub/static:
+        source: storage
+        source_path: static
     runtime:
       extensions:
         - xsl
@@ -25,6 +102,11 @@ applications:
         memory_limit: 512M
         max_execution_time: 300
         upload_max_filesize: 10M
+    crons:
+      magento:
+        spec: '*/5 * * * *'
+        commands:
+          start: php bin/magento cron:run
     relationships:
       db: {}
       cache: {}
@@ -32,17 +114,18 @@ applications:
       search: {}
       queue: {}
 
+# Versions aligned with Magento 2.4.6 system requirements.
 services:
   db:
-    type: mariadb:12.3
+    type: mariadb:10.6
   cache:
-    type: redis:8.8
+    type: redis:7.2
   session:
-    type: redis-persistent:8.8
+    type: redis-persistent:7.2
   search:
-    type: opensearch:3
+    type: opensearch:2
   queue:
-    type: rabbitmq:4.3
+    type: rabbitmq:3.13
 
 routes:
   https://{default}/:
