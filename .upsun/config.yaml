@@ -10,6 +10,11 @@ applications:
       build: |
         set -ex
         composer install --no-progress --no-interaction --optimize-autoloader --no-dev
+        # Luma sample data via the git-source method (no repo.magento.com keys
+        # needed): link the sample-data modules into the app; the deploy hook's
+        # setup:upgrade installs the fixtures on the next deploy.
+        git clone --depth 1 --branch 2.4.6 https://github.com/magento/magento2-sample-data.git
+        php -f magento2-sample-data/dev/tools/build-sample-data.php -- --ce-source="$PWD"
         # app/etc is mounted at runtime, which shadows the committed files in it.
         # Keep a copy outside the mount to restore on deploy.
         mkdir -p init
