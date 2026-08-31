@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <carriers>
+            <weightshipping>
+                <active>1</active>
+                <model>Luma\WeightShipping\Model\Carrier\WeightRate</model>
+                <name>Weight Based Rate</name>
+                <title>Weight Based Shipping</title>
+                <base_fee>5.00</base_fee>
+                <rate_per_bracket>2.50</rate_per_bracket>
+                <specificerrmsg>This shipping method is not available. To use this shipping method, please contact us.</specificerrmsg>
+            </weightshipping>
+        </carriers>
+    </default>
+</config>
