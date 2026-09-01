@@ -1,0 +1,59 @@
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+//
+//  Variables
+//  ---------------------------------------------
+
+@minicart-free-shipping__indent: @indent__s;
+@minicart-free-shipping-bar__height: 8px;
+@minicart-free-shipping-bar__background-color: @color-gray89;
+@minicart-free-shipping-bar-fill__background-color: @color-orange-red1;
+@minicart-free-shipping-bar-fill__background-color-qualified: #3d8b3d;
+@minicart-free-shipping-message__color: @text__color;
+
+//
+//  Common
+//  ---------------------------------------------
+
+& when (@media-common = true) {
+    .minicart-free-shipping {
+        margin: 0 0 @minicart-free-shipping__indent;
+
+        .minicart-free-shipping-bar {
+            background-color: @minicart-free-shipping-bar__background-color;
+            border-radius: (@minicart-free-shipping-bar__height / 2);
+            height: @minicart-free-shipping-bar__height;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .minicart-free-shipping-bar-fill {
+            background-color: @minicart-free-shipping-bar-fill__background-color;
+            border-radius: (@minicart-free-shipping-bar__height / 2);
+            display: block;
+            height: 100%;
+            transition: width .3s ease-in-out;
+        }
+
+        .minicart-free-shipping-message {
+            color: @minicart-free-shipping-message__color;
+            display: block;
+            font-size: @font-size__s;
+            margin-top: (@minicart-free-shipping__indent / 2);
+        }
+
+        &.minicart-free-shipping-_qualified {
+            .minicart-free-shipping-bar-fill {
+                background-color: @minicart-free-shipping-bar-fill__background-color-qualified;
+            }
+
+            .minicart-free-shipping-message {
+                color: @minicart-free-shipping-bar-fill__background-color-qualified;
+                font-weight: @font-weight__semibold;
+            }
+        }
+    }
+}
