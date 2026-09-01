@@ -1,0 +1,22 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<!-- ko if: isVisible() -->
+<div class="minicart-free-shipping" data-bind="css: {'minicart-free-shipping-_qualified': qualified()}">
+    <div class="minicart-free-shipping-bar"
+         role="progressbar"
+         aria-valuemin="0"
+         aria-valuemax="100"
+         data-bind="attr: {
+             'aria-valuenow': percent(),
+             'aria-valuetext': message(),
+             'aria-label': label
+         }">
+        <span class="minicart-free-shipping-bar-fill" data-bind="style: {width: percent() + '%'}"></span>
+    </div>
+    <span class="minicart-free-shipping-message" aria-live="polite" data-bind="text: message()"></span>
+</div>
+<!-- /ko -->
